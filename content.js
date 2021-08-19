@@ -20,16 +20,16 @@ chrome.runtime.onMessage.addListener(
         var newCatTitle = request.newCat.newCatTitle;
         var newUsers = request.newCat.newUsers;
         var newUsersAsArray = newUsers.split();
-
+        var existingCatList = new Array();
         chrome.storage.local.get(['catTitles'], function(result) {
-            var existingCatList = result.catTitles;
+            existingCatList = result.catTitles;
 
         });
 
-        existingCatList.add("newCatTitle");
+        existingCatList.push("newCatTitle");
 
         chrome.storage.local.set({ newCatTitle: newUsersAsArray }, function() {
-            console.log('newCatTitle is set to ' + newUsersAsArray);
+            console.log(newCatTitle + " is set to " + newUsersAsArray);
         });
     }
 );

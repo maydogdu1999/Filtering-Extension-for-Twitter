@@ -117,9 +117,6 @@ addApplyButton();
 addNewCatAddElements();
 document.getElementById("newCatDiv").style.display = "none";
 
-catName = "News";
-makeDivForNewCat(catName);
-makeDivForNewCat("history");
 
 
 //listeners below
@@ -141,7 +138,7 @@ document.addEventListener('click', function(e) {
 
             });
         });
-
+        makeDivForNewCat(newCatTitle);
         switchBetweenReg_newCat();
     }
 });
