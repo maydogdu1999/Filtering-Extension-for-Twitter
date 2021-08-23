@@ -13,7 +13,9 @@ window.XMLHttpRequest.prototype.open = function(method, URL) {
                 //////////////////////////////////////
                 var data = JSON.parse(_this.responseText); // {"fields": ["a","b"]}
 
-
+                chrome.storage.sync.get("catTitles", function(result) {
+                    console.log("catTitles" + " is " + result.catTitles)
+                });
 
 
                 for (const [key, value] of Object.entries(data.globalObjects.tweets)) {

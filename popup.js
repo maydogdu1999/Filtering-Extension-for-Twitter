@@ -1,4 +1,13 @@
-console.log("hello");
+var checkDiv = document.createElement("div");
+checkDiv.id = "checkDiv";
+addNewCatButton();
+addApplyButton();
+addNewCatAddElements();
+document.getElementById("newCatDiv").style.display = "none";
+
+
+
+
 
 function makeDivForNewCat(catName) {
     // creating checkbox element
@@ -97,25 +106,19 @@ function switchBetweenReg_newCat() {
         document.getElementById("newCatDiv").style.display = "none";
         document.getElementById("filterButton").style.display = "block";
         document.getElementById("newCatButton").style.display = "block";
-        document.getElementById("checkDiv").style.display = "block";
+        checkDiv.style.display = "block";
     } else {
         document.getElementById("newCatDiv").style.display = "block";
         document.getElementById("filterButton").style.display = "none";
         document.getElementById("newCatButton").style.display = "none";
-        document.getElementById("checkDiv").style.display = "none";
+        checkDiv.style.display = "none";
 
     }
 
 }
 
 
-var checkDiv = document.createElement("div");
-checkDiv.id = "checkDiv";
-addNewCatButton();
-addApplyButton();
 
-addNewCatAddElements();
-document.getElementById("newCatDiv").style.display = "none";
 
 
 
@@ -133,12 +136,16 @@ document.addEventListener('click', function(e) {
         var newCatTitle = document.getElementById("newCatName").value;
         var newUsers = document.getElementById("newUsers").value;
 
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { newCat: { newCatTitle, newUsers } }, function(response) {
+        if (newCatTitle.trim() != "") {
+            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { newCat: { newCatTitle, newUsers } }, function(response) {
 
+                });
             });
-        });
-        makeDivForNewCat(newCatTitle);
-        switchBetweenReg_newCat();
+            makeDivForNewCat(newCatTitle);
+            switchBetweenReg_newCat();
+        }
+
+
     }
 });
