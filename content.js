@@ -7,17 +7,18 @@ s.onload = function() {
 
 document.head.appendChild(s);
 
-
 var catList = new Array();
 chrome.storage.sync.set({ catTitles: catList }, function() {});
 
-
+/** 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-
+        if (!request.newCat) {
+            return true;
+        }
         var newCatTitle = request.newCat.newCatTitle;
         var newUsers = request.newCat.newUsers;
-
+        var newUsersList = newUsers.split();
 
         //updating catTitles
         chrome.storage.sync.get(['catTitles'], function(result) {
@@ -30,16 +31,35 @@ chrome.runtime.onMessage.addListener(
 
         //adding newCatTitle with newUsersAsArray
         chrome.storage.sync.set({
-            [newCatTitle]: newUsers
+            [newCatTitle]: newUsersList
         }, function() {
             console.log(newCatTitle + " is set to " + newUsers);
         });
 
         //just checking if works
-        chrome.storage.sync.get(newCatTitle, function(result) {
-            console.log(newCatTitle + " is set to " + result[newCatTitle])
-        });
+
 
         return true;
     }
-);
+); */
+
+
+
+/** 
+
+//var port = chrome.runtime.connect();
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+
+        if (!request.detail) {
+            return true;
+        }
+
+
+        var userNames = request.detail;
+        console.log("from content: " + userNames);
+        //port.postMessage("userNames");
+
+        return true;
+    }
+); */

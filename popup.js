@@ -1,11 +1,11 @@
-var checkDiv = document.createElement("div");
-checkDiv.id = "checkDiv";
-addNewCatButton();
-addApplyButton();
-addNewCatAddElements();
-document.getElementById("newCatDiv").style.display = "none";
-
-
+if (document.getElementById("checkDiv") == null) {
+    var checkDiv = document.createElement("div");
+    checkDiv.id = "checkDiv";
+    addNewCatButton();
+    addApplyButton();
+    addNewCatAddElements();
+    document.getElementById("newCatDiv").style.display = "none";
+}
 
 
 
@@ -18,7 +18,7 @@ function makeDivForNewCat(catName) {
     checkbox1.type = "checkbox";
     checkbox1.name = "checkbox1";
     checkbox1.value = "checked";
-    checkbox1.id = "id1";
+    checkbox1.id = catName;
 
     // creating label for checkbox
     var label1 = document.createElement('label');
@@ -119,33 +119,86 @@ function switchBetweenReg_newCat() {
 
 
 
-
-
-
 //listeners below
 
 document.addEventListener('click', function(e) {
     if (e.target && e.target.id == "newCatButton") {
+
         switchBetweenReg_newCat();
     }
 });
 
 document.addEventListener('click', function(e) {
 
-    if (e.target && e.target.id == 'okayButton') {
-        var newCatTitle = document.getElementById("newCatName").value;
-        var newUsers = document.getElementById("newUsers").value;
+        if (e.target && e.target.id == 'okayButton') {
+            var newCatTitle = document.getElementById("newCatName").value;
+            var newUsers = document.getElementById("newUsers").value;
 
-        if (newCatTitle.trim() != "") {
-            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { newCat: { newCatTitle, newUsers } }, function(response) {
+            if (newCatTitle.trim() != "") {
+                /** 
+                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, { newCat: { newCatTitle, newUsers } }, function(response) {
 
+                    });
+                });*/
+                makeDivForNewCat(newCatTitle);
+                switchBetweenReg_newCat();
+            }
+
+
+        }
+    })
+    /** 
+
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id == "filterButton") {
+
+            var curList = new Array();
+
+            chrome.storage.sync.get(['catTitles'], function(result) {
+                curList = result.catTitles;
+
+                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, { innerMessage: curList }, function(response) {
+                        return true;
+                    });
                 });
             });
-            makeDivForNewCat(newCatTitle);
-            switchBetweenReg_newCat();
+
         }
+    });
+
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+            if (!request.innerMessage) {
+                return true;
+            }
+            var usernamesToFilter = new Array();
+            var curList = request.innerMessage;
+            makeDivForNewCat("hello");
+            for (const category of curList) {
+                if (document.getElementById(category).checked == true) {
+                    chrome.storage.sync.get(category, function(result) {
+                        thisCatList = result[category];
+                        for (const element of thisCatList) {
+                            makeDivForNewCat("hey");
+                            usernamesToFilter.push(element);
+                        }
+                    });
+                }
+
+            }
+            sendResponse({
+                response: "Message received"
+            });
+
+            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { detail: usernamesToFilter }, function(response) {
+                    return true;
+                });
+            });
+        }
+    );
 
 
-    }
-});
+    */

@@ -1,3 +1,12 @@
+/** 
+window.addEventListener("message", (event) => {
+    // We only accept messages from ourselves
+    if (event.data.userNames) {
+        var userNames = event.data.userNames;
+        console.log("script.js " + userNames);
+    }
+}, false); */
+
 var _open = XMLHttpRequest.prototype.open;
 window.XMLHttpRequest.prototype.open = function(method, URL) {
     var _onreadystatechange = this.onreadystatechange,
@@ -5,17 +14,13 @@ window.XMLHttpRequest.prototype.open = function(method, URL) {
 
     _this.onreadystatechange = function() {
         // catch only completed 'api/search/universal' requests
-        if (_this.readyState === 4 && _this.status === 200 && ~URL.indexOf('https://twitter.com/i/api/2/timeline/home.json?include_profile_interstitial_type=1&include_blocking=1&include_blocked_by=1&include_followed_by=1&include_want_retweets=1&include_mute_edge=1&include_can_dm=1&include_can_media_tag=1&skip_status=1&cards_platform=Web-12&include_cards=1&include_ext_alt_text=true&include_quote_count=true&include_reply_count=1&tweet_mode=extended&include_entities=true&include_user_entities=true&include_ext_media_color=true&include_ext_media_availability=true&send_error_codes=true&simple_quoted_tweet=true&earned=1&count=20&lca=true&ext=mediaStats%2ChighlightedLabel%2CvoiceInfo')) {
+        if (_this.readyState === 4 && _this.status === 200 && ~URL.indexOf('https://twitter.com/i/api/2/timeline/')) {
             try {
                 //////////////////////////////////////
                 // THIS IS ACTIONS FOR YOUR REQUEST //
                 //             EXAMPLE:             //
                 //////////////////////////////////////
                 var data = JSON.parse(_this.responseText); // {"fields": ["a","b"]}
-
-                chrome.storage.sync.get("catTitles", function(result) {
-                    console.log("catTitles" + " is " + result.catTitles)
-                });
 
 
                 for (const [key, value] of Object.entries(data.globalObjects.tweets)) {
