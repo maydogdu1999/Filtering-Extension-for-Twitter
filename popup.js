@@ -1,12 +1,6 @@
-var checkDiv = document.createElement("div");
-checkDiv.id = "checkDiv";
-addNewCatButton();
-document.body.appendChild(checkDiv);
-addApplyButton();
-addNewCatAddElements();
 document.getElementById("newCatDiv").style.display = "none";
-var curChecked;
 
+var curChecked;
 chrome.storage.sync.get(['checked'], function(result) {
     curChecked = result.checked;
     addExistingCats();
@@ -55,68 +49,6 @@ function makeDivForNewCat(catName) {
     checkDiv.appendChild(checkbox1);
     checkDiv.appendChild(label1);
 
-
-}
-
-function addApplyButton() {
-    var button = document.createElement('button');
-    button.id = "filterButton";
-    var textContent = document.createTextNode("Apply selected categories");
-
-    button.appendChild(textContent);
-    document.body.appendChild(button);
-}
-
-function addNewCatButton() {
-    var button = document.createElement('button');
-    button.id = "newCatButton";
-    var textContent = document.createTextNode("Add a new category");
-
-    button.appendChild(textContent);
-    document.body.appendChild(button);
-}
-
-function addNewCatAddElements() {
-    var newCatDiv = document.createElement("div");
-    newCatDiv.id = "newCatDiv";
-
-
-    //Cat Name
-    var input1 = document.createElement("INPUT");
-    input1.setAttribute("type", "text");
-    input1.setAttribute("id", "newCatName");
-    input1.setAttribute("name", "newCatName");
-
-    var label1 = document.createElement('label');
-    label1.setAttribute("for", "newCatName");
-    label1.innerHTML = "Category Name: ";
-
-    newCatDiv.appendChild(label1);
-    newCatDiv.appendChild(input1);
-
-    //usernames
-    var input2 = document.createElement("INPUT");
-    input2.setAttribute("type", "text");
-    input2.setAttribute("id", "newUsers");
-    input2.setAttribute("name", "newUsers");
-
-    var label2 = document.createElement('label');
-    label2.setAttribute("for", "newUsers");
-    label2.innerHTML = "Add usernames: ";
-
-
-    newCatDiv.appendChild(label2);
-    newCatDiv.appendChild(input2);
-
-    //okay button
-    var button = document.createElement('button');
-    button.id = "okayButton";
-    var textContent = document.createTextNode("Okay!");
-
-    button.appendChild(textContent);
-    newCatDiv.appendChild(button);
-
-    document.body.appendChild(newCatDiv);
 
 }
 
