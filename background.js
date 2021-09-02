@@ -6,7 +6,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
     chrome.storage.sync.set({ 'userNamesToFilter': userNames }, function() {});
     chrome.storage.sync.set({ 'checked': checked }, function() {});
 
-    console.log("from bg: started");
 
 });
 
@@ -15,7 +14,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.checked) {
-            console.log("received message (bg): " + request.checked);
             var checked = request.checked;
             updateUserNames(checked);
         }
@@ -32,11 +30,9 @@ function updateUserNames(checked) {
         for (const element of checked) {
             chrome.storage.sync.get(element, function(result) {
                 var curUsers = result[element];
-                console.log("curUsers: " + curUsers + " for element " + element);
+
                 for (const user of curUsers) {
                     userNames.push(user);
-                    console.log("curusernames: " + userNames);
-
                 }
                 chrome.storage.sync.set({ 'userNamesToFilter': userNames }, function() {});
             });

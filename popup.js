@@ -1,4 +1,3 @@
-console.log("from popup: popup opened");
 var checkDiv = document.createElement("div");
 checkDiv.id = "checkDiv";
 addNewCatButton();
@@ -7,6 +6,7 @@ addApplyButton();
 addNewCatAddElements();
 document.getElementById("newCatDiv").style.display = "none";
 var curChecked;
+
 chrome.storage.sync.get(['checked'], function(result) {
     curChecked = result.checked;
     addExistingCats();
@@ -15,7 +15,6 @@ chrome.storage.sync.get(['checked'], function(result) {
 function addExistingCats() {
     chrome.storage.sync.get(['catTitles'], function(result) {
         var curList = new Array();
-        console.log("curChedk: " + curChecked);
         curList = result.catTitles;
         for (const element of curList) {
             makeDivForNewCat(element);
@@ -166,9 +165,7 @@ document.addEventListener('click', function(e) {
                 var existingCatList = new Array();
                 existingCatList = result.catTitles;
                 existingCatList.push(newCatTitle);
-                chrome.storage.sync.set({ catTitles: existingCatList }, function() {
-                    console.log("updated catTitles" + existingCatList);
-                });
+                chrome.storage.sync.set({ catTitles: existingCatList }, function() {});
             });
 
             makeDivForNewCat(newCatTitle);
@@ -195,12 +192,8 @@ document.addEventListener('click', function(e) {
                 console.log(response.bgResponse);
             });
 
-            chrome.storage.sync.set({ "checked": checked }, function() {
-                console.log("checked: " + checked);
-            });
+            chrome.storage.sync.set({ "checked": checked }, function() {});
         });
-
-
 
 
     }
