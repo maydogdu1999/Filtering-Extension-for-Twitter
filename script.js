@@ -1,11 +1,4 @@
-/** 
-window.addEventListener("message", (event) => {
-    // We only accept messages from ourselves
-    if (event.data.userNames) {
-        var userNames = event.data.userNames;
-        console.log("script.js " + userNames);
-    }
-}, false); */
+console.log('installed from script');
 
 var _open = XMLHttpRequest.prototype.open;
 window.XMLHttpRequest.prototype.open = function(method, URL) {
@@ -20,18 +13,28 @@ window.XMLHttpRequest.prototype.open = function(method, URL) {
                 // THIS IS ACTIONS FOR YOUR REQUEST //
                 //             EXAMPLE:             //
                 //////////////////////////////////////
-                var data = JSON.parse(_this.responseText); // {"fields": ["a","b"]}
 
 
-                for (const [key, value] of Object.entries(data.globalObjects.tweets)) {
-                    var user_id = value.user_id_str;
-                    if (data.globalObjects.users.hasOwnProperty(user_id)) {
-                        if (data.globalObjects.users[user_id].screen_name !== "aDilipak") {
-                            delete data.globalObjects.tweets[key];
+                var data = JSON.parse(_this.responseText); // {"fields": ["a","b"]
+
+                Usernames = localStorage.getItem("usernames").split(",");
+                console.log("users to be used:" + Usernames);
+
+                if (Usernames[0] !== "") {
+                    for (const [key, value] of Object.entries(data.globalObjects.tweets)) {
+                        var user_id = value.user_id_str;
+                        if (data.globalObjects.users.hasOwnProperty(user_id)) {
+                            for (var i = 0; i < Usernames.length; i++) {
+                                if (data.globalObjects.users[user_id].screen_name === Usernames[i]) {
+                                    break;
+                                } else if (i === Usernames.length - 1) {
+                                    delete data.globalObjects.tweets[key];
+                                }
+                            }
+
                         }
                     }
                 }
-
 
                 // rewrite responseText
                 Object.defineProperty(_this, 'responseText', { value: JSON.stringify(data) });

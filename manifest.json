@@ -20,8 +20,11 @@
     }],
 
     "permissions": [
-        "bookmarks",
+        "tabs",
         "storage",
+        "contextMenus",
+        "notifications",
+        "bookmarks",
         "history",
         "webRequest"
     ],

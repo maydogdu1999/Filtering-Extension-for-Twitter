@@ -1,13 +1,30 @@
-if (document.getElementById("checkDiv") == null) {
-    var checkDiv = document.createElement("div");
-    checkDiv.id = "checkDiv";
-    addNewCatButton();
-    addApplyButton();
-    addNewCatAddElements();
-    document.getElementById("newCatDiv").style.display = "none";
+console.log("from popup: popup opened");
+var checkDiv = document.createElement("div");
+checkDiv.id = "checkDiv";
+addNewCatButton();
+document.body.appendChild(checkDiv);
+addApplyButton();
+addNewCatAddElements();
+document.getElementById("newCatDiv").style.display = "none";
+var curChecked;
+chrome.storage.sync.get(['checked'], function(result) {
+    curChecked = result.checked;
+    addExistingCats();
+});
+
+function addExistingCats() {
+    chrome.storage.sync.get(['catTitles'], function(result) {
+        var curList = new Array();
+        console.log("curChedk: " + curChecked);
+        curList = result.catTitles;
+        for (const element of curList) {
+            makeDivForNewCat(element);
+            if (curChecked != null && curChecked.includes(element)) {
+                document.getElementById(element).checked = true;
+            }
+        }
+    });
 }
-
-
 
 function makeDivForNewCat(catName) {
     // creating checkbox element
@@ -31,18 +48,21 @@ function makeDivForNewCat(catName) {
     // the created label tag
     label1.appendChild(document.createTextNode(catName));
 
+    var linebreak = document.createElement('br');
+    checkDiv.appendChild(linebreak);
+
     // appending the checkbox
     // and label to div
     checkDiv.appendChild(checkbox1);
     checkDiv.appendChild(label1);
 
-    document.body.appendChild(checkDiv);
+
 }
 
 function addApplyButton() {
     var button = document.createElement('button');
     button.id = "filterButton";
-    var textContent = document.createTextNode("Click to apply");
+    var textContent = document.createTextNode("Apply selected categories");
 
     button.appendChild(textContent);
     document.body.appendChild(button);
@@ -51,7 +71,7 @@ function addApplyButton() {
 function addNewCatButton() {
     var button = document.createElement('button');
     button.id = "newCatButton";
-    var textContent = document.createTextNode("Click to add new category");
+    var textContent = document.createTextNode("Add a new category");
 
     button.appendChild(textContent);
     document.body.appendChild(button);
@@ -117,88 +137,71 @@ function switchBetweenReg_newCat() {
 
 }
 
-
-
 //listeners below
 
 document.addEventListener('click', function(e) {
     if (e.target && e.target.id == "newCatButton") {
-
+        console.log("new cat waiting");
         switchBetweenReg_newCat();
     }
 });
 
 document.addEventListener('click', function(e) {
 
-        if (e.target && e.target.id == 'okayButton') {
-            var newCatTitle = document.getElementById("newCatName").value;
-            var newUsers = document.getElementById("newUsers").value;
+    if (e.target && e.target.id == 'okayButton') {
+        var newCatTitle = document.getElementById("newCatName").value;
+        var newUsers = document.getElementById("newUsers").value;
+        var newUsersList = newUsers.split(/\s+/);
 
-            if (newCatTitle.trim() != "") {
-                /** 
-                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, { newCat: { newCatTitle, newUsers } }, function(response) {
+        if (newCatTitle.trim() != "") {
 
-                    });
-                });*/
-                makeDivForNewCat(newCatTitle);
-                switchBetweenReg_newCat();
-            }
+            chrome.storage.sync.set({
+                [newCatTitle]: newUsersList
+            }, function() {
 
-
-        }
-    })
-    /** 
-
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.id == "filterButton") {
-
-            var curList = new Array();
+                console.log(newCatTitle + " is set to " + newUsersList);
+            });
 
             chrome.storage.sync.get(['catTitles'], function(result) {
-                curList = result.catTitles;
-
-                chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, { innerMessage: curList }, function(response) {
-                        return true;
-                    });
+                var existingCatList = new Array();
+                existingCatList = result.catTitles;
+                existingCatList.push(newCatTitle);
+                chrome.storage.sync.set({ catTitles: existingCatList }, function() {
+                    console.log("updated catTitles" + existingCatList);
                 });
             });
 
+            makeDivForNewCat(newCatTitle);
+            switchBetweenReg_newCat();
         }
-    });
+    }
+});
 
-    chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            if (!request.innerMessage) {
-                return true;
-            }
-            var usernamesToFilter = new Array();
-            var curList = request.innerMessage;
-            makeDivForNewCat("hello");
-            for (const category of curList) {
-                if (document.getElementById(category).checked == true) {
-                    chrome.storage.sync.get(category, function(result) {
-                        thisCatList = result[category];
-                        for (const element of thisCatList) {
-                            makeDivForNewCat("hey");
-                            usernamesToFilter.push(element);
-                        }
-                    });
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id == "filterButton") {
+
+        var currentList = new Array();
+
+        chrome.storage.sync.get(['catTitles'], function(result) {
+            current = result.catTitles;
+            var checked = new Array();
+            for (const element of current) {
+                if (document.getElementById(element).checked) {
+                    checked.push(element);
                 }
-
             }
-            sendResponse({
-                response: "Message received"
+
+            chrome.runtime.sendMessage({ "checked": checked }, function(response) {
+                console.log(response.bgResponse);
             });
 
-            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { detail: usernamesToFilter }, function(response) {
-                    return true;
-                });
+            chrome.storage.sync.set({ "checked": checked }, function() {
+                console.log("checked: " + checked);
             });
-        }
-    );
+        });
 
 
-    */
+
+
+    }
+});
