@@ -1,0 +1,17 @@
+.button {
+    width: 20px;
+    height: 20px;
+    background-color: #1E90FF;
+    font-size: 15px;
+    text-align: center;
+}
+
+#defaultDiv {
+    text-align: center;
+    color: #393977;
+}
+
+#checkDiv {
+    text-align: center;
+    display: inline-block;
+}
