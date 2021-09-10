@@ -1,25 +1,27 @@
 <html>
 
-<head> Filter Your Tweets </head>
+<head> </head>
 
-<body>
-    <button type="button" id="newCatButton">Add a new category</button>
-
-    <div id="checkDiv"></div>
-
-    <button type="button" id="filterButton">Apply selected categories</button>
-
-    <div id="newCatDiv">
-        <label for="newCatName">Category Name: </label>
-        <input type="text" id="newCatName" name="newCatName">
-
-        <label for="newUsers">Category Name: </label>
-        <input type="text" id="newUsers" name="newUsers">
-
-        <button type="button" id="okayButton">Okay!</button>
+<body style="width: 120px">
+    <div id=" defaultDiv ">
+        <button type="button " id="newCatButton " class="button "></button> New category <br> <br>
+        <button type="button " id="filterButton " class="button "></button> Apply selected <br> <br>
+        <button type="button " id="removeButton " class="button "></button> Remove selected <br> <br>
+        <b> Your Categories: </b> <br>
+        <div id="checkDiv "></div>
     </div>
 
-    <script src="popup.js"></script>
+    <div id="newCatDiv" style="margin-top: 10px ">
+        <label for="newCatName ">Category Title: </label>
+        <input type="text " id="newCatName " name="newCatName " placeholder="News, Sports etc. ">
+
+        <label for="newUsers ">Usernames: </label>
+        <input type="text " id="newUsers " name="newUsers " placeholder="jack456, aydmus99, ... ">
+
+        <button type="button " id="okayButton ">Okay!</button>
+    </div>
+    <script src="popup.js "></script>
+    <link rel="stylesheet " href="popup.css ">
 </body>
 
 </html>

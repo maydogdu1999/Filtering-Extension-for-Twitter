@@ -1,3 +1,8 @@
+/** When the extension is installed, initialize three arrays to store 
+ *  (i) the category titles, 
+ *  (ii) usernames that are currently being applied and will be filtered, 
+ *  (iii) and the category titles whose checkboxes are checkhed by the user.
+ */
 chrome.runtime.onInstalled.addListener(function(details) {
     var catList = new Array();
     var userNames = new Array();
@@ -9,8 +14,9 @@ chrome.runtime.onInstalled.addListener(function(details) {
 
 });
 
-
-
+/** Message listener for a change from popup.js in checked categories.
+ * Calls a function to update the usernames to be filtered.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.checked) {
@@ -21,6 +27,11 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+/**
+ * Update the usernames to be filtered based on given category names in checked.
+ * 
+ * @param {*} checked : a list containing category names that are currently checked.
+ */
 
 function updateUserNames(checked) {
     var userNames = new Array();
