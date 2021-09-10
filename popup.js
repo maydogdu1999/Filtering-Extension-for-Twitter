@@ -74,6 +74,7 @@ function makeDivForNewCat(catName) {
  */
 function switchBetweenReg_newCat() {
     if (document.getElementById("newCatDiv").style.display == "block") {
+        document.body.style.height = "125px";
         document.getElementById("newCatDiv").style.display = "none";
         document.getElementById("defaultDiv").style.display = "block";
     } else {
